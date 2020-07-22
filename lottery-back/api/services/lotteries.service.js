@@ -26,7 +26,6 @@ async function getLotteries() {
   const sender = accounts[0];
 
   var result;
-
   await contract.methods.getLotteries().call({from: sender})
 	.then((r) => {
 		result = r;
@@ -64,7 +63,7 @@ async function getLottery(lotteryAddress) {
   const sender = accounts[0];
 
   var result;
-  await  contract.methods.getLottery(lotteryAddress).call({from: sender})
+  await contract.methods.getLottery().call({from: sender})
 	.then((r) => {
 		result = r;
 		console.log(result);
