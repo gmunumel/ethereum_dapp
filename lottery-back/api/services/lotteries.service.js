@@ -84,8 +84,6 @@ async function createLottery(privateKey, lotteryData) {
   const accounts = await web3.eth.getAccounts();
   const sender = accounts[0];
 
-  console.log(sender);
-
   contract.methods.createLottery(maxNumberParticipants, participationPrice, participationPot, prize).send({
 	from: sender, 
 	gasPrice: gasPrice,
