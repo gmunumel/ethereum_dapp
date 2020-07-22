@@ -1,0 +1,52 @@
+
+.....................................................................
+getLotteries
+.....................................................................
+curl --location --request GET 'http://localhost:10010/lotteries'
+
+
+.....................................................................
+getLottery
+.....................................................................
+curl --location --request GET 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd'
+
+
+.....................................................................
+createLottery
+.....................................................................
+curl --location --request POST 'http://localhost:10010/lotteries/' \
+--header 'private_key: 0x91fb6dbf3ee4691748661bc47118e82a32678bf066b73ab6967c06b4abcc3800' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "maxNumberParticipants": 2,
+    "participationPrice": 3,
+    "prize": 2,
+    "participationPot": 10
+}'
+
+.....................................................................
+getParticipants
+.....................................................................
+curl --location --request GET 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd/participants'
+
+
+.....................................................................
+addParticipant
+.....................................................................
+http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd/participants
+
+
+.....................................................................
+rafflePrize
+.....................................................................
+curl --location --request PUT 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd' \
+--header 'private_key: 0x91fb6dbf3ee4691748661bc47118e82a32678bf066b73ab6967c06b4abcc3800' \
+--header 'Content-Type: application/json'
+
+
+.....................................................................
+withdrawParticipation
+.....................................................................
+curl --location --request PUT 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd/participants' \
+--header 'private_key: 0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d' \
+--header 'Content-Type: application/json'
