@@ -14,7 +14,6 @@ async function getLotteries() {
   const gasPrice = config.eth.transactionOptions.gasPrice;
 
   // SimpleStorage contract specs
-  const NODE_ACC = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
   const lotteryFactoryContractAddress = config.contracts.LotteryFactory.contractAddress;
   const lotteryFactoryContractAbi = config.contracts.LotteryFactory.contractAbi;
   const lotteryFactoryContractBytecode = config.contracts.LotteryFactory.contractBytecode;
@@ -23,14 +22,21 @@ async function getLotteries() {
   const web3 = new Web3(ethereumUrl);
   const contract = new web3.eth.Contract(lotteryFactoryContractAbi, lotteryFactoryContractAddress);
 
-  contract.methods.getLotteries().call({from: NODE_ACC})
-	.then((result) => {
-		console.log(result);
+  const accounts = await web3.eth.getAccounts();
+  const sender = accounts[0];
+
+  var result;
+
+  await contract.methods.getLotteries().call({from: sender})
+	.then((r) => {
+		result = r;
+		console.log(r);
 	}).catch((error) => {
+		result = error;
 		console.log(error);
 	});
 
-  return { message: 'Ok' };
+  return { message: 'Ok', result: result };
 }
 
 /**
@@ -39,8 +45,35 @@ async function getLotteries() {
  * curl: curl --location --request GET 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd'
  */
 async function getLottery(lotteryAddress) {
-  // TODO
-  return { message: 'Ok' };
+  // Ethereum config
+  const ethereumUrl = `http://${config.eth.nodeUrl}:${config.eth.nodePort}`;
+  const gasLimit = config.eth.transactionOptions.gas;
+  const gasPrice = config.eth.transactionOptions.gasPrice;
+
+  // SimpleStorage contract specs
+  const lotteryFactoryContractAddress = config.contracts.LotteryFactory.contractAddress;
+  const lotteryFactoryContractAbi = config.contracts.LotteryFactory.contractAbi;
+  const lotteryFactoryContractBytecode = config.contracts.LotteryFactory.contractBytecode;
+  const lotteryContractAbi = config.contracts.Lottery.contractAbi;
+
+  const Web3 = require('web3');
+  const web3 = new Web3(ethereumUrl);
+  const contract = new web3.eth.Contract(lotteryContractAbi, lotteryAddress);
+
+  const accounts = await web3.eth.getAccounts();
+  const sender = accounts[0];
+
+  var result;
+  await  contract.methods.getLottery(lotteryAddress).call({from: sender})
+	.then((r) => {
+		result = r;
+		console.log(result);
+	}).catch((error) => {
+		result = error;
+		console.log(error);
+	});
+
+  return { message: 'Ok', result: result };
 }
 
 /**
@@ -72,7 +105,6 @@ async function createLottery(privateKey, lotteryData) {
   const gasPrice = config.eth.transactionOptions.gasPrice;
 
   // SimpleStorage contract specs
-  const NODE_ACC = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
   const lotteryFactoryContractAddress = config.contracts.LotteryFactory.contractAddress;
   const lotteryFactoryContractAbi = config.contracts.LotteryFactory.contractAbi;
   const lotteryFactoryContractBytecode = config.contracts.LotteryFactory.contractBytecode;
