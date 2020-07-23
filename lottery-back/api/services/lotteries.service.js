@@ -10,8 +10,6 @@ const config = require('../../config/config');
 async function getLotteries() {
   // Ethereum config
   const ethereumUrl = `http://${config.eth.nodeUrl}:${config.eth.nodePort}`;
-  const gasLimit = config.eth.transactionOptions.gas;
-  const gasPrice = config.eth.transactionOptions.gasPrice;
  
   // SimpleStorage contract specs
   const lotteryFactoryContractAddress = config.contracts.LotteryFactory.contractAddress;
@@ -46,13 +44,8 @@ async function getLotteries() {
 async function getLottery(lotteryAddress) {
   // Ethereum config
   const ethereumUrl = `http://${config.eth.nodeUrl}:${config.eth.nodePort}`;
-  const gasLimit = config.eth.transactionOptions.gas;
-  const gasPrice = config.eth.transactionOptions.gasPrice;
  
   // SimpleStorage contract specs
-  const lotteryFactoryContractAddress = config.contracts.LotteryFactory.contractAddress;
-  const lotteryFactoryContractAbi = config.contracts.LotteryFactory.contractAbi;
-  const lotteryFactoryContractBytecode = config.contracts.LotteryFactory.contractBytecode;
   const lotteryContractAbi = config.contracts.Lottery.contractAbi;
  
   const Web3 = require('web3');
@@ -146,7 +139,8 @@ async function getParticipants(lotteryAddress) {
   const Web3 = require('web3');
   const web3 = new Web3(ethereumUrl);
   const contract = new web3.eth.Contract(lotteryContractAbi, lotteryAddress);
- 
+
+  const accounts = await web3.eth.getAccounts();
   const sender = accounts[0];
  
   var result;
@@ -160,17 +154,6 @@ async function getParticipants(lotteryAddress) {
   });
  
   return { message: 'Ok', result: result };
- 
- 
- 
- 
- 
- 
- 
- 
- 
-  
-  return { message: 'Ok' };
 }
  
 /**
@@ -250,7 +233,6 @@ async function withdrawParticipation(privateKey, lotteryAddress) {
   /*Aqui seguro que no hae falta firmar la transaccion porque no entregamos valor. Esto No hace falta
   web3.eth.accounts.signTransaction(tx, privateKey [, callback]);
   */
- 
  
   var result;
   await contract.methods.getParticipants().call({from: sender})
