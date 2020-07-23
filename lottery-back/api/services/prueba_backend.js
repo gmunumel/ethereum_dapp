@@ -1,4 +1,9 @@
-t ganache = require("ganache-cli");
+//SE EJECUTA GANACHE-CLI EN BACKGROUND:
+ 
+ 
+//Cargamos paquetes de ganache  y web3,
+//Se instala con npm en el lottery contracts web3. (estaba en el lottery back (viceversa valdria, ganache en back))
+//const ganache = require("ganache-cli");
 const Web3 = require('web3');
  
 //Se inicializa la instancia de web3 como objeto de objeto de conexion de web3
@@ -37,10 +42,6 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
  
 //Ahora con el nodo levantado y web3 conectado pasamos a hacer una pequeñea prueba para mandar dinero de una cuenta a otra de nuestra cartera de ganache
 //Pero primero probamos a poder crear una nueva cuenta:
-var Accounts = require('web3-eth-accounts');
-var accounts = new Accounts('ws://localhost:8545');
-const cuentas = web3.eth.accounts.create(web3.utils.randomHex(32));
-console.log(cuentas)
  
 //Guardamos para la prueba la publica y privada generada
 /*
@@ -51,31 +52,12 @@ console.log(cuentas)
 //Ahora si hacemos la prueba de mandar dinero de una cuenta a otra:
  
 //CUIDADO LLAMADA ASINCRONA
-async function mandaPrueba() {
-const accounts = await web3.eth.getAccounts()
- 
-//Definimos sender y receiver
-const sender = accounts[0]
-const receiver = accounts[1]
-console.log(sender)
-console.log(receiver)
-  
-var totalBalance = await web3.eth.getBalance(sender).then(console.log);
-console.log(totalBalance)
  
 // Mandamos una cantidad loca de ethers para comprobar que funciona. 
  
 // ATENCION NO HACE FALTA FIRMAR LA TRANSACCION POR QUE WEB3 A CONECTADO CON EL NODO DE MANERA DIRECTA Y HA RECUPERADO LAS PRIVADAS
 // EN UNA RED REAL HABRÍA QUE PASAR LA PRIVADA QUE ES LO QUE VA  PASAR EN LOS LOTEROS QUE NO TENEMOS LAS PRIVADAS  
  
-web3.eth.sendTransaction({
-  from: sender,
-  to: receiver,
-  value: '10000000000000000000'
-})
- 
-}
-mandaPrueba()
  
  
  
@@ -83,29 +65,10 @@ mandaPrueba()
  
 // CREAR UN CONTRATO NUEVO:
 //HAY PARAMETROS QUE SE DEFINEN EN LOTTERYBACK/CONFIG
-    var myContract = new web3.eth.Contract(ABI, {
-      from: sender, 
-      gasPrice: '20000000000',
-      data: "byteCode"
-    });
  
  
  
 // y ya con el contrato desplegado interactuamos con las funciones_
-  const contratoLotero = web3.eth.Contract(contract_abi, contract_address);
- 
-// En un call no hace falta el from ni gas ni NamedNodeMap,. ya que son llamadas GRATUITAS. son las funciones de tipo public view
-  contratoLotero.methods.funciona().call();
- 
-// aqui si hace falta el from y el gas etc, hay dos opciones:
-// 1) EL send lo hagamos nosotros desde nuestra wallet creada por ganache
-// tirado porque cogemos una de las deiz cuentas y tiramos pa alante
- 
-// Ejemplo del lotero que crea una loto, y al cuenta es de nuetsra cuenta de ganache
-  contratoLotero.methods.createLottery().send({
-    from: sender,
-    gasPrice: '20000000000'
-  })
  
  
 // Si la cuenta que se va a usar es una aleatoria (es decir una que un usuario de eth tiene) entonces se complica, 
@@ -113,77 +76,24 @@ mandaPrueba()
  
 // Para este ejercicio: Creamos una cuenta y transferimos eths
  
-const cuentaPrueba = web3.eth.accounts.create(web3.utils.randomHex(32));
-console.log(cuentaPrueba)
  
-async function mandaPrueba2(acc) {
+async function mandaPrueba2() {
   const accounts = await web3.eth.getAccounts()
   
   //Definimos sender y receiver
-  const sender = accounts[2]
-  const receiver = acc
-  console.log(sender)
-  console.log(receiver)
+  const sender = accounts[2];
     
-  var totalBalance = await web3.eth.getBalance(sender).then(console.log);
-  console.log(totalBalance)
- 
-  // Mandamos una cantidad loca de ethers para comprobar que funciona. 
-  
-  // ATENCION NO HACE FALTA FIRMAR LA TRANSACCION POR QUE WEB3 A CONECTADO CON EL NODO DE MANERA DIRECTA Y HA RECUPERADO LAS PRIVADAS
-  // EN UNA RED REAL HABRÍA QUE PASAR LA PRIVADA QUE ES LO QUE VA  PASAR EN LOS LOTEROS QUE NO TENEMOS LAS PRIVADAS  
-  
-  await web3.eth.sendTransaction({
-    from: sender,
-    to: receiver,
-    value: '10000000000000000000'
-  })
-    
-  var totalBalance2 = await web3.eth.getBalance(receiver).then(console.log);
+  var totalBalance2 = await web3.eth.getBalance(sender);
   console.log(totalBalance2)
   
   }
+
+mandaPrueba2();
   
-  mandaPrueba2(cuentaPrueba.address)
-  
- 
-// Ahora que esta cuenta ya tiene saldo se puede usar junto a su privada para mandar transacciones al contrato (no habria hecho falta hacer todo esto
-//  porque didacticamente se podría haber usado una de ganache, pero bueno)
- 
-// para poder mandar una transaccion con una cuenta de eth de la que se conoce la privada hay que firmar la transaccion:
- 
-var Tx = require('ethereumjs-tx');
- 
-// creamos el objeto del envio que queremos generar
  
  
-// lo unico un pelin raro es el encodeABI, que 
-dataTx = myContract.methods.myfuncion(params).encodeABI(); //The encoded ABI of the method
- 
-var rawTx = {
-  to: ,//a la direccion del contrato (recuperada de loterias)
-  data:dataTx 
-}
- 
-// CREO QUE ESTO SI QUEREMOS PUEDE SER UN OBJETO COMO LOS ANTERIORES, (NO ESTOY SEGURO...)
- 
-// var rawTx = contratoLotero.methods.createLottery().send({
-//   from: sender,
-//   gasPrice: '20000000000'
-// })
  
  
-// aqui viene la magia, con la privada se firma la transaccion
-var tx = new Tx(rawTx);
-tx.sign('yourprivateKey');
  
-// se serializa (sin mas, movidas criptograficas)
-var serializedTx = tx.serialize();
-// y aqui en vez de invocar a la funcion directamente de call() o send() de los metodos de un contratoi
-// se invoca a la funcion enviar transaccion firmada que dentro tiene la seralizedTx que dentro tiene el metodo de la funcion
-web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-.on('receipt', console.log);
- 
-// Y YA ESTA!!!!
- 
-// SI CLARAMENTE ESTO SIN SABER LO QUE SE ESTA HACIENDO ES JODIDO
+
+
