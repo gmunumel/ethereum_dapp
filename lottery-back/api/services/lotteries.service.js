@@ -46,6 +46,8 @@ async function getLotteries() {
  * Return all the information of the lottery corresponding to the given address.
  * @param {string} lotteryAddress address of the lottery
  * curl: curl --location --request GET 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd'
+
+ curl --location --request GET 'http://localhost:10010/lotteries/0x79183957Be84C0F4dA451E534d5bA5BA3FB9c696'
  */
 async function getLottery(lotteryAddress) {
 
@@ -154,6 +156,8 @@ async function createLottery(privateKey, lotteryData) {
  * Return a list of lottery's participants.
  * @param {string} lotteryAddress address of the lottery
  * curl: curl --location --request GET 'http://localhost:10010/lotteries/0x5CB1848a868b67C6E8D2719647Ffe6c092a64ebd/participants'
+
+ curl --location --request GET 'http://localhost:10010/lotteries/0x79183957Be84C0F4dA451E534d5bA5BA3FB9c696/participants'
  */
 async function getParticipants(lotteryAddress) {
 
@@ -255,7 +259,7 @@ async function addParticipant(privateKey, lotteryAddress) {
   var error;
   await contract.methods.addParticipant().send({
     from: sender.address,
-    value: parametrosLoteria.result[1],  //Aqui es donde en vez de meter el value a pelo, se bnusca en el getLottery
+    value: parametrosLoteria.result[1],  //Aqui es donde en vez de meter el value fijo, se bnusca en el getLottery
     gasPrice: gasPrice,
     gasLimit: gasLimit
  
@@ -293,7 +297,7 @@ curl --location --request PUT 'http://localhost:10010/lotteries/0x79183957Be84C0
   --header 'Content-Type: application/json'
 
 curl --location --request PUT 'http://localhost:10010/lotteries/0x79183957Be84C0F4dA451E534d5bA5BA3FB9c696/participants' \
-  --header 'private_key: 0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d' \
+  --header 'private_key: 0x6370fd033278c143179d81c5526140625662b8daa446c22ee2d73db3707e620c' \
   --header 'Content-Type: application/json'
  */
 async function withdrawParticipation(privateKey, lotteryAddress) {
