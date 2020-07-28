@@ -1,5 +1,5 @@
 
-aragma solidity ^0.4.26; //Lo dice en el video del día 4 a las 2:32:28 solidity ^0.4.26; //Lo dice en el video del día 4 a las 2:32:28
+pragma solidity ^0.4.26; //Lo dice en el video del día 4 a las 2:32:28 solidity ^0.4.26; //Lo dice en el video del día 4 a las 2:32:28
 
 
 /// @title Factoria de loterias
