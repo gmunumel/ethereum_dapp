@@ -89,9 +89,9 @@ async function createLottery(privateKey, lotteryData) {
   const contract = new web3.eth.Contract(lotteryFactoryContractAbi, lotteryFactoryContractAddress);
  
   const sender = web3.eth.accounts.privateKeyToAccount(privateKey);
-  var participationPrice_wei = web3.utils.toWei(participationPrice.toString());
-  var participationPot_wei = web3.utils.toWei(participationPot.toString());
-  var prize_wei = web3.utils.toWei(prize.toString());
+  var participationPrice_wei = participationPrice.toString();
+  var participationPot_wei = participationPot.toString();
+  var prize_wei = prize.toString();
 
   var result;
   var error;
