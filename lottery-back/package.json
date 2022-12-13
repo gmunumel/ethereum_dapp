@@ -10,7 +10,7 @@
   "author": "@miguelmartinezinf",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.12.3",
+    "express": "^4.17.3",
     "swagger-express-mw": "^0.1.0",
     "web3": "^1.2.6",
     "mathjs": "^7.1.0"
