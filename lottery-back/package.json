@@ -11,7 +11,7 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0",
+    "swagger-express-mw": "^0.7.0",
     "web3": "^1.2.6",
     "mathjs": "^7.1.0"
   },
